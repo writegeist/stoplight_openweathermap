@@ -15,9 +15,9 @@ servers:
   - url: 'https://api.openweathermap.org/data/2.5'
     description: prod
 paths:
-  weather:
+  /weather:
     get:
-      summary: weather
+      summary: Weather
       tags:
         - Weather endpoints
       responses:
