@@ -15,12 +15,185 @@ servers:
   - url: 'https://api.openweathermap.org/data/2.5'
     description: prod
 paths:
-  weather: 
+  weather:
     get:
       summary: weather
       tags:
         - Weather endpoints
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  coord:
+                    type: object
+                    properties:
+                      lon:
+                        type: number
+                      lat:
+                        type: number
+                    required:
+                      - lon
+                      - lat
+                  weather:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - id
+                        - main
+                        - description
+                        - icon
+                      properties:
+                        id:
+                          type: number
+                        main:
+                          type: string
+                          minLength: 1
+                        description:
+                          type: string
+                          minLength: 1
+                        icon:
+                          type: string
+                          minLength: 1
+                  base:
+                    type: string
+                    minLength: 1
+                  main:
+                    type: object
+                    properties:
+                      temp:
+                        type: number
+                      feels_like:
+                        type: number
+                      temp_min:
+                        type: number
+                      temp_max:
+                        type: number
+                      pressure:
+                        type: number
+                      humidity:
+                        type: number
+                    required:
+                      - temp
+                      - feels_like
+                      - temp_min
+                      - temp_max
+                      - pressure
+                      - humidity
+                  visibility:
+                    type: number
+                  wind:
+                    type: object
+                    properties:
+                      speed:
+                        type: number
+                      deg:
+                        type: number
+                    required:
+                      - speed
+                      - deg
+                  clouds:
+                    type: object
+                    properties:
+                      all:
+                        type: number
+                    required:
+                      - all
+                  dt:
+                    type: number
+                  sys:
+                    type: object
+                    properties:
+                      type:
+                        type: number
+                      id:
+                        type: number
+                      country:
+                        type: string
+                        minLength: 1
+                      sunrise:
+                        type: number
+                      sunset:
+                        type: number
+                    required:
+                      - type
+                      - id
+                      - country
+                      - sunrise
+                      - sunset
+                  timezone:
+                    type: number
+                  id:
+                    type: number
+                  name:
+                    type: string
+                    minLength: 1
+                  cod:
+                    type: number
+                required:
+                  - coord
+                  - weather
+                  - base
+                  - main
+                  - visibility
+                  - wind
+                  - clouds
+                  - dt
+                  - sys
+                  - timezone
+                  - id
+                  - name
+                  - cod
+              examples:
+                Example:
+                  value:
+                    coord:
+                      lon: -121.95
+                      lat: 37.35
+                    weather:
+                      - id: 803
+                        main: Clouds
+                        description: broken clouds
+                        icon: 04n
+                    base: stations
+                    main:
+                      temp: 45.25
+                      feels_like: 41.16
+                      temp_min: 41
+                      temp_max: 50
+                      pressure: 1026
+                      humidity: 75
+                    visibility: 16093
+                    wind:
+                      speed: 2.57
+                      deg: 36
+                    clouds:
+                      all: 75
+                    dt: 1579415808
+                    sys:
+                      type: 1
+                      id: 5845
+                      country: US
+                      sunrise: 1579360793
+                      sunset: 1579396557
+                    timezone: -28800
+                    id: 0
+                    name: Santa Clara
+                    cod: 200
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized_response'
+          headers: {}
       operationId: get-weather
       description: 'Access current weather data for any location on Earth including over 200,000 cities! Current weather is frequently updated based on global models and data from more than 40,000 weather stations.'
       parameters:
@@ -83,7 +256,12 @@ components:
       schema:
         type: string
   schemas:
-    type: string
+    unauthorized_response:
+      title: unauthorized_response
+      type: object
+      properties:
+        id:
+          type: string
   securitySchemes:
     app_id:
       name: appid
